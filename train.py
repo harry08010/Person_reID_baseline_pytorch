@@ -105,7 +105,7 @@ if opt.train_all:
      train_all = '_all'
 
 image_datasets = {}
-image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train' + train_all),
+image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train'),
                                           data_transforms['train'])
 image_datasets['val'] = datasets.ImageFolder(os.path.join(data_dir, 'val'),
                                           data_transforms['val'])
