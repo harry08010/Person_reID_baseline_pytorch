@@ -11,9 +11,9 @@ from torch.autograd import Variable
 import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
-# import matplotlib
-# matplotlib.use('agg')
-# import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 from PIL import Image
 import time
 import os
@@ -105,7 +105,7 @@ if opt.train_all:
      train_all = '_all'
 
 image_datasets = {}
-image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train'),
+image_datasets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train' + train_all),
                                           data_transforms['train'])
 image_datasets['val'] = datasets.ImageFolder(os.path.join(data_dir, 'val'),
                                           data_transforms['val'])
@@ -241,20 +241,20 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 ######################################################################
 # Draw Curve
 #---------------------------
-# x_epoch = []
-# fig = plt.figure()
-# ax0 = fig.add_subplot(121, title="loss")
-# ax1 = fig.add_subplot(122, title="top1err")
-# def draw_curve(current_epoch):
-#     x_epoch.append(current_epoch)
-#     ax0.plot(x_epoch, y_loss['train'], 'bo-', label='train')
-#     ax0.plot(x_epoch, y_loss['val'], 'ro-', label='val')
-#     ax1.plot(x_epoch, y_err['train'], 'bo-', label='train')
-#     ax1.plot(x_epoch, y_err['val'], 'ro-', label='val')
-#     if current_epoch == 0:
-#         ax0.legend()
-#         ax1.legend()
-#     fig.savefig( os.path.join('./model',name,'train.jpg'))
+x_epoch = []
+fig = plt.figure()
+ax0 = fig.add_subplot(121, title="loss")
+ax1 = fig.add_subplot(122, title="top1err")
+def draw_curve(current_epoch):
+    x_epoch.append(current_epoch)
+    ax0.plot(x_epoch, y_loss['train'], 'bo-', label='train')
+    ax0.plot(x_epoch, y_loss['val'], 'ro-', label='val')
+    ax1.plot(x_epoch, y_err['train'], 'bo-', label='train')
+    ax1.plot(x_epoch, y_err['val'], 'ro-', label='val')
+    if current_epoch == 0:
+        ax0.legend()
+        ax1.legend()
+    fig.savefig( os.path.join('./model',name,'train.jpg'))
 
 ######################################################################
 # Save model
