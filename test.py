@@ -166,7 +166,7 @@ def get_id(img_path):
     labels = []
     for path, v in img_path:
         filename = os.path.basename(path)
-        labels.append[filename]
+        labels.append(filename)
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
