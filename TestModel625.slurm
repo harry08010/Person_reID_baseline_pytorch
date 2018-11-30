@@ -7,7 +7,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=harry08010@tamu.edu
 #SBATCH --job-name=TestModel625
-#SBATCH --time=20:00:00
+#SBATCH --time=2:00:00
 #SBATCH --ntasks=1
 #SBATCH --mem=6144M
 #SBATCH --output=TestResult.%j
