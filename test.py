@@ -147,26 +147,33 @@ def extract_feature(model,dataloaders):
         features = torch.cat((features,ff), 0)
     return features
 
+# def get_id(img_path):
+#     camera_id = []
+#     labels = []
+#     for path, v in img_path:
+#         #filename = path.split('/')[-1]
+#         filename = os.path.basename(path)
+#         label = filename[0:4]
+#         camera = filename.split('c')[1]
+#         if label[0:2]=='-1':
+#             labels.append(-1)
+#         else:
+#             labels.append(int(label))
+#         camera_id.append(int(camera[0]))
+#     return camera_id, labels
+
 def get_id(img_path):
-    camera_id = []
     labels = []
     for path, v in img_path:
-        #filename = path.split('/')[-1]
         filename = os.path.basename(path)
-        label = filename[0:4]
-        camera = filename.split('c')[1]
-        if label[0:2]=='-1':
-            labels.append(-1)
-        else:
-            labels.append(int(label))
-        camera_id.append(int(camera[0]))
-    return camera_id, labels
+        labels.append[filename]
+    return labels
 
 gallery_path = image_datasets['gallery'].imgs
 query_path = image_datasets['query'].imgs
 
-gallery_cam,gallery_label = get_id(gallery_path)
-query_cam,query_label = get_id(query_path)
+gallery_labels = get_id(gallery_path)
+query_labels = get_id(query_path)
 
 if opt.multi:
     mquery_path = image_datasets['multi-query'].imgs
@@ -176,12 +183,12 @@ if opt.multi:
 # Load Collected data Trained model
 print('-------test-----------')
 if opt.use_dense:
-    model_structure = ft_net_dense(751)
+    model_structure = ft_net_dense(500)
 else:
-    model_structure = ft_net(751)
+    model_structure = ft_net(500)
 
 if opt.PCB:
-    model_structure = PCB(751)
+    model_structure = PCB(500)
 
 model = load_network(model_structure)
 
@@ -204,7 +211,7 @@ if opt.multi:
     mquery_feature = extract_feature(model,dataloaders['multi-query'])
     
 # Save to Matlab for check
-result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'gallery_cam':gallery_cam,'query_f':query_feature.numpy(),'query_label':query_label,'query_cam':query_cam}
+result = {'gallery_f':gallery_feature.numpy(),'gallery_labels':gallery_labels,'query_f':query_feature.numpy(),'query_labels':query_labels}
 scipy.io.savemat('pytorch_result.mat',result)
 if opt.multi:
     result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
