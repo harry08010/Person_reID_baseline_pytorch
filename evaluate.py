@@ -22,7 +22,7 @@ def evaluate(qf,ql,qc,gf,gl,gc):
     junk_index2 = np.intersect1d(query_index, camera_index)
     junk_index = np.append(junk_index2, junk_index1) #.flatten())
     
-    CMC_tmp = compute_mAP(index, good_index, junk_index)
+    CMC_tmp = compute_mAP(index, good_index, junk_index1)
     return CMC_tmp
 
 
@@ -74,9 +74,7 @@ if multi:
     
 CMC = torch.IntTensor(len(gallery_label)).zero_()
 ap = 0.0
-print('label' + str(query_label))
 for i in range(len(query_label)):
-    print(i)
     ap_tmp, CMC_tmp = evaluate(query_feature[i],query_label[i],query_cam[i],gallery_feature,gallery_label,gallery_cam)
     if CMC_tmp[0]==-1:
         continue
