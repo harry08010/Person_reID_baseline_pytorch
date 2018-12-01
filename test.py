@@ -167,7 +167,7 @@ def get_label(names, infoPrefix, test_dir):
         print(str(lines))
         for line in lines:
             params = line.split()
-            
+    car
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
