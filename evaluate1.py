@@ -65,7 +65,7 @@ def main():
     logPath = args.features
     labelPath = args.labels
 
-    logFile = {subset: scipy.io.loadmat(os.path.join(logPath, 'feature_val_%s.mat' % subset))
+    logFile = {subset: scipy.io.loadmat(os.path.join(logPath, 'feature_valid_%s.mat' % subset))
                for subset in ['query', 'gallery']}
 
     labelDict = {subset: pd.read_csv(os.path.join(labelPath, subset + 'Info.txt'), header=None,
