@@ -174,7 +174,7 @@ def get_label(names, infoPrefix, test_dir):
             for param in params:
                 if name == param[0]:
                     labels.append(param[1])
-                    print(str(name) + ‘ ’ + param[1]) 
+                    print(str(name) + ' ' + param[1]) 
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
