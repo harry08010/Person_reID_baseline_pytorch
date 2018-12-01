@@ -74,8 +74,9 @@ if multi:
     
 CMC = torch.IntTensor(len(gallery_label)).zero_()
 ap = 0.0
-#print(query_label)
+print(query_label)
 for i in range(len(query_label)):
+    print(i)
     ap_tmp, CMC_tmp = evaluate(query_feature[i],query_label[i],query_cam[i],gallery_feature,gallery_label,gallery_cam)
     if CMC_tmp[0]==-1:
         continue
