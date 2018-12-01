@@ -27,7 +27,7 @@ parser.add_argument('--name', default='ft_ResNet50', type=str, help='save model 
 parser.add_argument('--batchsize', default=32, type=int, help='batchsize')
 parser.add_argument('--use_dense', action='store_true', help='use densenet121' )
 parser.add_argument('--PCB', action='store_true', help='use PCB' )
-parser.add_argument('--multi', action='store_true', help='use multiple query' )
+# parser.add_argument('--multi', action='store_true', help='use multiple query' )
 
 opt = parser.parse_args()
 
@@ -79,14 +79,14 @@ if opt.PCB:
 
 data_dir = test_dir
 
-if opt.multi:
-    image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query','multi-query']}
-    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
-                                             shuffle=False, num_workers=16) for x in ['gallery','query','multi-query']}
-else:
-    image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query']}
-    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
-                                             shuffle=False, num_workers=16) for x in ['gallery','query']}
+# if opt.multi:
+#     image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query','multi-query']}
+#     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
+#                                              shuffle=False, num_workers=16) for x in ['gallery','query','multi-query']}
+# else:
+image_datasets = {x: datasets.ImageFolder( os.path.join(data_dir,x) ,data_transforms) for x in ['gallery','query']}
+dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=opt.batchsize,
+                                            shuffle=False, num_workers=16) for x in ['gallery','query']}
 class_names = image_datasets['query'].classes
 use_gpu = torch.cuda.is_available()
 
@@ -149,7 +149,6 @@ def extract_feature(model,dataloaders):
 
 def get_id(img_path):
     camera_id = []
-    labels = []
     names = []
     for path, v in img_path:
         #filename = path.split('/')[-1]
@@ -157,34 +156,43 @@ def get_id(img_path):
         name = filename.replace('.png', '')
         names.append(name)
         camera_id.append('1')
-        for file in os.listdir(str(img_path[0])):
-            if file.endswith(".txt"):
-                with open(file) as f:
-                    line = f.readline()
-                    print(line)
-        cara
-    return camera_id, labels
+    print(names)
+    print(camera_id)
+    return camera_id, names
+
+def get_label(names, infoPrefix, test_dir):
+    labels = []
+    with open(os.path.join(str(test_dir), infoPrefix + "Info.txt")) as f:
+        lines = f.readlines()
+        print(str(lines))
+        for line in lines:
+            params = line.split()
+            
+    return labels
 
 gallery_path = image_datasets['gallery'].imgs
 query_path = image_datasets['query'].imgs
 
-gallery_cam,gallery_label = get_id(gallery_path)
-query_cam,query_label = get_id(query_path)
+gallery_cam,gallery_names = get_id(gallery_path)
+query_cam,query_names = get_id(query_path)
 
-if opt.multi:
-    mquery_path = image_datasets['multi-query'].imgs
-    mquery_cam,mquery_label = get_id(mquery_path)
+gallery_label = get_label(gallery_names, 'gallery', test_dir)
+query_label = get_label(query_names, 'query', test_dir)
+
+# if opt.multi:
+#     mquery_path = image_datasets['multi-query'].imgs
+#     mquery_cam,mquery_names = get_id(mquery_path)
 
 ######################################################################
 # Load Collected data Trained model
 print('-------test-----------')
 if opt.use_dense:
-    model_structure = ft_net_dense(751)
+    model_structure = ft_net_dense(500)
 else:
-    model_structure = ft_net(751)
+    model_structure = ft_net(500)
 
 if opt.PCB:
-    model_structure = PCB(751)
+    model_structure = PCB(500)
 
 model = load_network(model_structure)
 
@@ -203,12 +211,12 @@ if use_gpu:
 # Extract feature
 gallery_feature = extract_feature(model,dataloaders['gallery'])
 query_feature = extract_feature(model,dataloaders['query'])
-if opt.multi:
-    mquery_feature = extract_feature(model,dataloaders['multi-query'])
+# if opt.multi:
+#     mquery_feature = extract_feature(model,dataloaders['multi-query'])
     
 # Save to Matlab for check
 result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'gallery_cam':gallery_cam,'query_f':query_feature.numpy(),'query_label':query_label,'query_cam':query_cam}
 scipy.io.savemat('pytorch_result.mat',result)
-if opt.multi:
-    result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
-    scipy.io.savemat('multi_query.mat',result)
+# if opt.multi:
+#     result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
+#     scipy.io.savemat('multi_query.mat',result)
