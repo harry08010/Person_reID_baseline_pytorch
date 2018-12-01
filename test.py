@@ -162,12 +162,19 @@ def get_id(img_path):
 
 def get_label(names, infoPrefix, test_dir):
     labels = []
+    params = []
     with open(os.path.join(str(test_dir), infoPrefix + "Info.txt")) as f:
         lines = f.readlines()
         print(str(lines))
         for line in lines:
-            params = line.split()
-    car
+            param = line.split()
+            params.append(param)
+        
+        for name in names:
+            for param in params:
+                if name == param[0]:
+                    labels.append(param[1])
+                    print(str(name) + ‘ ’ + param[1]) 
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
