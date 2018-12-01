@@ -14,15 +14,15 @@ def evaluate(qf,ql,qc,gf,gl,gc):
     index = index[::-1]
     #index = index[0:2000]
     # good index
-    query_index = np.argwhere(gl==ql)
+    query_index = np.argwhere(int(gl)==int(ql))
     camera_index = np.argwhere(gc==qc)
 
     good_index = np.setdiff1d(query_index, camera_index, assume_unique=True)
-    junk_index1 = np.argwhere(gl==-1)
+    junk_index1 = np.argwhere(int(gl)==-1)
     junk_index2 = np.intersect1d(query_index, camera_index)
     junk_index = np.append(junk_index2, junk_index1) #.flatten())
     
-    CMC_tmp = compute_mAP(index, good_index, junk_index1)
+    CMC_tmp = compute_mAP(index, good_index, junk_index)
     return CMC_tmp
 
 
