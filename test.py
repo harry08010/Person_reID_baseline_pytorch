@@ -149,15 +149,16 @@ def extract_feature(model,dataloaders):
 
 def get_id(img_path):
     labels = []
-    print(str(img_path))
+    names = []
     for path, v in img_path:
         #filename = path.split('/')[-1]
         filename = os.path.basename(path)
-        label = filename[0:4]
-        if label[0:2]=='-1':
-            labels.append(-1)
-        else:
-            labels.append(int(label))
+        name = filename.replace('.png', '')
+        names.append(name)
+        # if label[0:2]=='-1':
+        #     labels.append(-1)
+        # else:
+        #     labels.append(int(label))
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
