@@ -58,11 +58,11 @@ def compute_mAP(index, good_index, junk_index):
 ######################################################################
 result = scipy.io.loadmat('pytorch_result.mat')
 query_feature = result['query_f']
-query_cam = result['query_cam'][0]
-query_label = result['query_label'][0]
+query_cam = result['query_cam']
+query_label = result['query_label']
 gallery_feature = result['gallery_f']
-gallery_cam = result['gallery_cam'][0]
-gallery_label = result['gallery_label'][0]
+gallery_cam = result['gallery_cam']
+gallery_label = result['gallery_label']
 
 multi = os.path.isfile('multi_query.mat')
 
