@@ -151,13 +151,14 @@ def get_id(img_path):
     camera_id = []
     labels = []
     names = []
+    print(str(type(img_path)))
     for path, v in img_path:
         #filename = path.split('/')[-1]
         filename = os.path.basename(path)
         name = filename.replace('.png', '')
         names.append(name)
         camera_id.append('1')
-        for file in os.listdir(img_path):
+        for file in os.listdir(img_path[0]):
             if file.endswith(".txt"):
                 with open(file) as f:
                     line = f.readline()
