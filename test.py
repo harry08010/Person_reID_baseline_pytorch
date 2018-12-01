@@ -149,8 +149,7 @@ def extract_feature(model,dataloaders):
 
 def get_id(img_path):
     labels = []
-    with open(os.path.join(os.path.basename(img_path), 'Info.txt') as f:
-        lines = f.readlines()
+    print(str(img_path))
     for path, v in img_path:
         #filename = path.split('/')[-1]
         filename = os.path.basename(path)
@@ -163,8 +162,6 @@ def get_id(img_path):
 
 gallery_path = image_datasets['gallery'].imgs
 query_path = image_datasets['query'].imgs
-print(str(gallery_path))
-print(str(query_path))
 
 gallery_label = get_id(gallery_path)
 query_label = get_id(query_path)
@@ -205,7 +202,7 @@ if opt.multi:
     mquery_feature = extract_feature(model,dataloaders['multi-query'])
     
 # Save to Matlab for check
-result = {'gallery_f':gallery_feature.numpy(),'gallery_labels':gallery_labels,'query_f':query_feature.numpy(),'query_labels':query_labels}
+result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'query_f':query_feature.numpy(),'query_label':query_label}
 scipy.io.savemat('pytorch_result.mat',result)
 if opt.multi:
     result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
