@@ -15,7 +15,7 @@ def evaluate(qf,ql,qc,gf,gl,gc):
     #index = index[0:2000]
     # good index
     print(str(type(gl)) + str(gl))
-    print(type((ql)) + str(ql))
+    print(str(type(ql)) + str(ql))
     query_index = np.argwhere(gl==ql)
     camera_index = np.argwhere(gc==qc)
 
