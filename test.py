@@ -185,6 +185,8 @@ query_cam,query_names = get_id(query_path)
 
 gallery_label = get_label(gallery_names, 'gallery', test_dir)
 query_label = get_label(query_names, 'query', test_dir)
+print('query_label' + str(len(query_label)))
+print('gallery_label' + str(len(gallery_label)))
 
 # if opt.multi:
 #     mquery_path = image_datasets['multi-query'].imgs
