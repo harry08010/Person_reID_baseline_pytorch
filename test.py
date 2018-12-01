@@ -148,6 +148,7 @@ def extract_feature(model,dataloaders):
     return features
 
 def get_id(img_path):
+    camera_id = []
     labels = []
     names = []
     for path, v in img_path:
@@ -155,21 +156,24 @@ def get_id(img_path):
         filename = os.path.basename(path)
         name = filename.replace('.png', '')
         names.append(name)
-        # if label[0:2]=='-1':
-        #     labels.append(-1)
-        # else:
-        #     labels.append(int(label))
-    return labels
+        camera_id.append('1')
+        for file in os.listdir(img_path):
+            if file.endswith(".txt"):
+                with open(file) as f:
+                    line = f.readline()
+                    print(line)
+        cara
+    return camera_id, labels
 
 gallery_path = image_datasets['gallery'].imgs
 query_path = image_datasets['query'].imgs
 
-gallery_label = get_id(gallery_path)
-query_label = get_id(query_path)
+gallery_cam,gallery_label = get_id(gallery_path)
+query_cam,query_label = get_id(query_path)
 
 if opt.multi:
     mquery_path = image_datasets['multi-query'].imgs
-    mquery_label = get_id(mquery_path)
+    mquery_cam,mquery_label = get_id(mquery_path)
 
 ######################################################################
 # Load Collected data Trained model
@@ -203,7 +207,7 @@ if opt.multi:
     mquery_feature = extract_feature(model,dataloaders['multi-query'])
     
 # Save to Matlab for check
-result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'query_f':query_feature.numpy(),'query_label':query_label}
+result = {'gallery_f':gallery_feature.numpy(),'gallery_label':gallery_label,'gallery_cam':gallery_cam,'query_f':query_feature.numpy(),'query_label':query_label,'query_cam':query_cam}
 scipy.io.savemat('pytorch_result.mat',result)
 if opt.multi:
     result = {'mquery_f':mquery_feature.numpy(),'mquery_label':mquery_label,'mquery_cam':mquery_cam}
