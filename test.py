@@ -147,37 +147,31 @@ def extract_feature(model,dataloaders):
         features = torch.cat((features,ff), 0)
     return features
 
-# def get_id(img_path):
-#     camera_id = []
-#     labels = []
-#     for path, v in img_path:
-#         #filename = path.split('/')[-1]
-#         filename = os.path.basename(path)
-#         label = filename[0:4]
-#         camera = filename.split('c')[1]
-#         if label[0:2]=='-1':
-#             labels.append(-1)
-#         else:
-#             labels.append(int(label))
-#         camera_id.append(int(camera[0]))
-#     return camera_id, labels
-
 def get_id(img_path):
     labels = []
+    with open(os.path.join(os.path.basename(img_path), 'Info.txt') as f:
+        lines = f.readlines()
     for path, v in img_path:
+        #filename = path.split('/')[-1]
         filename = os.path.basename(path)
-        labels.append(filename)
+        label = filename[0:4]
+        if label[0:2]=='-1':
+            labels.append(-1)
+        else:
+            labels.append(int(label))
     return labels
 
 gallery_path = image_datasets['gallery'].imgs
 query_path = image_datasets['query'].imgs
+print(str(gallery_path))
+print(str(query_path))
 
-gallery_labels = get_id(gallery_path)
-query_labels = get_id(query_path)
+gallery_label = get_id(gallery_path)
+query_label = get_id(query_path)
 
 if opt.multi:
     mquery_path = image_datasets['multi-query'].imgs
-    mquery_cam,mquery_label = get_id(mquery_path)
+    mquery_label = get_id(mquery_path)
 
 ######################################################################
 # Load Collected data Trained model
